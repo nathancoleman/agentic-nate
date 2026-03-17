@@ -20,6 +20,7 @@ Use this skill when creating a new pull request, updating an existing pull reque
 ## Core operating rules
 - Use the GitHub CLI (`gh`) for PR operations (`gh pr create`, `gh pr edit`, `gh pr view`, `gh pr status`).
 - Rely on the existing `gh` authentication context; do not add separate authentication steps unless `gh` reports an auth error.
+- Always open newly created PRs in the browser immediately after creation (`gh pr view --web` or equivalent).
 - Aim for PR size under 400 changed lines.
 - Slightly above 400 is acceptable when the change remains easy to review.
 - If a PR becomes significantly larger, split into a stack of targeted pull requests.
@@ -28,6 +29,7 @@ Use this skill when creating a new pull request, updating an existing pull reque
 
 ## Stacked PR requirements
 - Build the stack in dependency order so each PR can be reviewed with minimal context switching.
+- Create every stacked PR after the first in draft mode initially (`gh pr create --draft`).
 - Every PR after the first must add this note at the very top of the PR body:
 
 ```md
@@ -37,6 +39,7 @@ Use this skill when creating a new pull request, updating an existing pull reque
 
 - Replace `<previous-pr-number>` with the immediately preceding PR in the stack.
 - Keep this note accurate if PR numbers, ordering, or dependencies change.
+- On updates, check whether the referenced prior PR has merged; if it has, remove the top-of-body stack warning from the current PR.
 
 ## Adaptive PR formatting
 - First, infer repository conventions from existing PRs, commit history, or contribution docs.
