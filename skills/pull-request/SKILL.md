@@ -1,10 +1,10 @@
 ---
 name: pull-request
-description: Create high-quality pull requests with clear reviewer context, right-sized scope, and adaptive formatting that matches repository conventions.
+description: Create and maintain high-quality pull requests, including triaging and resolving review feedback with clear reviewer context.
 compatibility: opencode
 metadata:
   audience: engineers
-  scope: pull-requests
+  scope: pull-requests-lifecycle
   style: adaptive
 ---
 
@@ -13,9 +13,10 @@ metadata:
 - Keep PRs right-sized and split oversized work into a coherent stack when needed.
 - Ensure commit and PR sequencing tells a clear story from first change to final integration.
 - Keep PR metadata current as changes evolve.
+- Triage review feedback into actionable items and close resolved conversations.
 
 ## When to use me
-Use this skill when creating a new pull request, updating an existing pull request, or restructuring large work into stacked pull requests.
+Use this skill when creating or updating a pull request, restructuring large work into stacked pull requests, or addressing review comments and requested changes.
 
 ## Core operating rules
 - Use the GitHub CLI (`gh`) for PR operations (`gh pr create`, `gh pr edit`, `gh pr view`, `gh pr status`).
@@ -26,6 +27,10 @@ Use this skill when creating a new pull request, updating an existing pull reque
 - If a PR becomes significantly larger, split into a stack of targeted pull requests.
 - Prefer targeted commits that each represent one logical step.
 - In a stack, each PR must also be targeted and represent a clear step in the overall story.
+- Treat each review thread as a mini work item: understand ask, implement, reply, then resolve when complete.
+- If code changed in response to a thread, post a reply describing what changed before resolving.
+- Do not resolve a thread with an open reviewer question or intentionally deferred work; reply with rationale and next step instead.
+- If any addressed feedback came from Copilot, always re-request a review from Copilot before handoff.
 
 ## Stacked PR requirements
 - Build the stack in dependency order so each PR can be reviewed with minimal context switching.
@@ -53,6 +58,17 @@ Use this skill when creating a new pull request, updating an existing pull reque
 - Update the title and body whenever appropriate to prevent stale reviewer context.
 - For stacked PRs, re-validate dependency references and top-of-body stack notes after each update.
 
+## Feedback triage and conversation resolution
+- Gather open review threads and group them by file or theme.
+- Implement changes in logical batches and run proportional validation.
+- Resolve a conversation only when both are true:
+  - The requested change is implemented (or a clear non-code resolution is agreed).
+  - A reply is posted on the thread with a concise outcome.
+- If you already pushed the fix but have not replied yet, reply first, then resolve.
+- Before handoff, re-check for unresolved threads and close any that now satisfy the rule above.
+- For thread resolution, use GraphQL `resolveReviewThread` via `gh api graphql`.
+- Re-request Copilot review with `gh pr edit --add-reviewer "github-copilot[bot]"` after resolving Copilot feedback.
+
 ## Validation and readiness checks
 - Confirm branch and base branch are correct.
 - Review full branch delta, not only the latest commit.
@@ -62,3 +78,7 @@ Use this skill when creating a new pull request, updating an existing pull reque
 ## Final output
 - Provide the PR URL.
 - Provide a short readiness summary with: scope, validations run, notable risks, and stack position (if applicable).
+- Report which feedback items were addressed.
+- Report which conversation threads were resolved and why.
+- State whether Copilot feedback was involved and confirm Copilot review was re-requested.
+- Call out any intentionally open threads with required follow-up.
