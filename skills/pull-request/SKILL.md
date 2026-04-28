@@ -68,6 +68,11 @@ Use this skill when creating or updating a pull request, restructuring large wor
 
 ## Feedback triage and conversation resolution
 - Gather open review threads and group them by file or theme.
+- Before acting on any feedback, evaluate whether it falls within the PR's stated scope (title, body, and the intent of the existing diff).
+- If feedback requests changes that are clearly outside the PR's scope (e.g., unrelated refactors, feature requests, or fixes to pre-existing issues not introduced by this PR):
+  - Do NOT implement the out-of-scope change.
+  - Reply to the thread politely explaining that the suggestion is out of scope for this PR, and suggest it be tracked separately (e.g., as a new issue or follow-up PR).
+  - Do not resolve the thread—leave it for the reviewer to acknowledge.
 - Implement changes in logical batches and run proportional validation.
 - Resolve a conversation only when both are true:
   - The requested change is implemented (or a clear non-code resolution is agreed).
