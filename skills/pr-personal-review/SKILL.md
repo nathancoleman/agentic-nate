@@ -1,5 +1,5 @@
 ---
-name: pre-review
+name: pr-personal-review
 description: Post author-perspective comments on a PR to guide reviewers toward critical change areas and clarify non-obvious logic.
 compatibility: opencode
 metadata:
