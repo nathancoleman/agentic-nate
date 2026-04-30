@@ -56,12 +56,14 @@ Use this skill when creating or updating a pull request, restructuring large wor
 - If conventions are clear, match them.
 - If conventions are unclear, use a concise default structure that covers purpose, change scope, validation, and risks.
 - Avoid rigid templates when they do not match the repo's normal style.
-- Write PR summaries to describe only the final net diff in the PR; do not include internal state transitions or intermediate steps that are not present in the final PR diff.
+- Write PR summaries that communicate the larger theme or motivation behind the changes, not a file-by-file changelog. Explain *why* the PR exists, what problem it solves, and how the approach works at a high level. Avoid enumerating individual changes unless a specific item is surprising or carries risk.
+- Do not include internal state transitions or intermediate steps that are not present in the final PR diff.
 - During review-driven iterations, favor precise edits over broad refactors unless a refactor is required for correctness, safety, or maintainability.
 
 ## Update behavior on every push
 - Whenever updates are pushed to a PR, re-check whether the title and body still match the current diff and intent.
 - Update the title and body whenever appropriate to prevent stale reviewer context.
+- When editing the PR body, preserve any existing screenshots or images (markdown image syntax or HTML `<img>` tags) in place. Do not remove, reorder, or rewrite image references.
 - Re-validate the Jira link at the top of the PR body (when applicable) and keep the key/URL aligned.
 - For stacked PRs, re-validate dependency references and top-of-body stack notes after each update.
 - For stacked PRs with bracketed Jira prefixes in titles, re-validate prefix consistency across the full stack after each update.
