@@ -52,7 +52,7 @@ Decisions that require background knowledge the reviewer may not have, including
 3. Identify the PR's theme from the title and body.
 4. Look at recent merged PRs and the surrounding codebase to understand patterns and context that reviewers may not have fresh in mind.
 5. Walk the diff and select locations that are critical, subtle, or likely to confuse. Look for code that mirrors existing patterns elsewhere in the repo.
-6. Draft comments—one per location. Each comment should be 1-3 sentences max. Reference analogous code paths or recent changes when it helps build the reviewer's mental model.
+6. Draft comments—one per location. Each comment should be 1-2 informal sentences max. Keep the tone conversational and direct. Reference analogous code paths or recent changes when it helps build the reviewer's mental model.
 7. Post all comments as a single PR review using the GitHub API. The review must:
    - Use event `COMMENT` (not `APPROVE` or `REQUEST_CHANGES`).
    - Set the review body to `"Personal review"`.
