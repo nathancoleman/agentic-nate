@@ -57,7 +57,7 @@ Decisions that require background knowledge the reviewer may not have, including
    - Use event `COMMENT` (not `APPROVE` or `REQUEST_CHANGES`).
    - Set the review body to `"Personal review"`.
    - Include all comments in the `comments` array of the review submission (not posted individually).
-   - Comments should be file-level (set `path` only, no `line` or `position`) unless a specific line reference is essential for clarity.
+   - Comments can be file-level (`path` only) or line-level (`path` + `line`) depending on what best serves the reviewer.
    - Use `gh api repos/{owner}/{repo}/pulls/{number}/reviews` with a single POST containing `body`, `event`, and `comments`.
 8. Report back with a summary of how many comments were posted and which files they target.
 
