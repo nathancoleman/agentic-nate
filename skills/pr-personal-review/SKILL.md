@@ -23,7 +23,7 @@ Use this skill after a PR is ready for review but before requesting reviewers. T
 - Do NOT post comments on trivial or self-explanatory changes (imports, formatting, renames with obvious intent).
 - Every comment must add reviewer value—either by highlighting criticality or clarifying complexity.
 - Keep comments concise. Lead with the insight; skip preamble.
-- Use PR review comments attached to specific lines/files (`gh api` for pull request review comments), not generic issue comments.
+- Use a single PR review submission (not individual comments) attached to specific lines/files via the GitHub API.
 
 ## Comment categories
 Post comments that fall into one or more of these categories:
@@ -53,7 +53,11 @@ Decisions that require background knowledge the reviewer may not have, including
 4. Look at recent merged PRs and the surrounding codebase to understand patterns and context that reviewers may not have fresh in mind.
 5. Walk the diff and select locations that are critical, subtle, or likely to confuse. Look for code that mirrors existing patterns elsewhere in the repo.
 6. Draft comments—one per location. Each comment should be 1-3 sentences max. Reference analogous code paths or recent changes when it helps build the reviewer's mental model.
-7. Post comments as a single PR review using the GitHub API (submit as a `COMMENT` review, not `APPROVE` or `REQUEST_CHANGES`).
+7. Post all comments as a single PR review using the GitHub API. The review must:
+   - Use event `COMMENT` (not `APPROVE` or `REQUEST_CHANGES`).
+   - Set the review body to `"Personal review"`.
+   - Include all comments in the `comments` array of the review submission (not posted individually).
+   - Use `gh api repos/{owner}/{repo}/pulls/{number}/reviews` with a single POST containing `body`, `event`, and `comments`.
 8. Report back with a summary of how many comments were posted and which files they target.
 
 ## Constraints
