@@ -28,6 +28,23 @@ Use this skill after a PR is ready for review but before requesting reviewers. T
 ## Comment categories
 Post comments that fall into one or more of these categories:
 
+### Removal rationale
+Explain *why* something was removed or replaced, not just that it's gone. Reviewers often wonder whether a deletion is safe.
+- Example: "we no longer use basic auth and so don't need `htpasswd` for nginx"
+
+### External references
+Link to external tools, services, or docs that give the reviewer context they can't get from the diff alone.
+- Example: "These come from the IBM W3 SSO Provisioner [here](https://w3.ibm.com/security/sso-provisioner/applications/...) (VPN required) and have already been added as secrets in this repo"
+- Example: "This uses [oauth2-proxy](https://github.com/oauth2-proxy/oauth2-proxy) to handle all of the back-and-forth with W3 for token exchange"
+
+### Pointing to in-code documentation
+When the code itself is well-documented, direct the reviewer to read those comments instead of restating them.
+- Example: "Check out the comments on each stanza, tried to document this well in code"
+
+### Security and access implications
+Call out changes that affect security boundaries, access control, or secret management so reviewers don't overlook them.
+- Example: "This makes `/w3/auth` unavailable to the outside world"
+
 ### Critical to theme
 Changes that are the core of what the PR accomplishes. Flag these so reviewers know where to focus deepest attention.
 - Example: "These are improving upon error handling and dealing with IDs now being auto-assigned UUIDs, so format is important"
@@ -63,6 +80,6 @@ Decisions that require background knowledge the reviewer may not have, including
 
 ## Constraints
 - Do not suggest code changes. This is not a code review—it is author context for reviewers.
-- Do not duplicate information already present in the PR body.
+- Do not duplicate information already present in the PR body. It is fine to supplement or point to specific details the body covers at a high level.
 - Do not comment on files or hunks that are outside the PR's stated scope.
 - Aim for 3-8 comments on a typical PR. Fewer is fine if the PR is straightforward; more is acceptable for complex PRs, but never be noisy.
