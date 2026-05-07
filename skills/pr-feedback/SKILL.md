@@ -42,6 +42,12 @@ Use this skill when addressing review comments, resolving conversations, or iter
 - For thread resolution, use GraphQL `resolveReviewThread` via `gh api graphql`.
 - Re-request Copilot review with `gh pr edit --add-reviewer "github-copilot[bot]"` after resolving Copilot feedback.
 
+## Copilot review loop
+- After re-requesting Copilot review, poll for the new review to appear (check via `gh api repos/{owner}/{repo}/pulls/{number}/reviews`).
+- Once the new review lands, check for any new Copilot comments.
+- If Copilot left new comments, address them, push fixes, resolve threads, and re-request Copilot review again.
+- Repeat this cycle until Copilot leaves no comments.
+
 ## Validation
 - Run relevant checks (tests, lint, type checks, build) when available and proportionate.
 - If checks are skipped or blocked, state that explicitly with reason and impact.
