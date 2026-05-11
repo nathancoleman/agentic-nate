@@ -51,6 +51,7 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - If conventions are unclear, use a concise default structure that covers purpose, change scope, validation, and risks.
 - Avoid rigid templates when they do not match the repo's normal style.
 - Write PR summaries that communicate the larger theme or motivation behind the changes, not a file-by-file changelog. Explain *why* the PR exists, what problem it solves, and how the approach works at a high level. Avoid enumerating individual changes unless a specific item is surprising or carries risk.
+- Use an informal summary style — write in plain language as if explaining the PR to a teammate, not generating a changelog. Do NOT use bullet-point lists of every file or function touched. A short paragraph or two is ideal.
 - Do not include internal state transitions or intermediate steps that are not present in the final PR diff.
 - During review-driven iterations, favor precise edits over broad refactors unless a refactor is required for correctness, safety, or maintainability.
 
