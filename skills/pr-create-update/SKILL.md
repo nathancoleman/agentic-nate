@@ -1,6 +1,6 @@
 ---
-name: pr-create
-description: Create, format, and maintain pull requests — sizing, stacking, metadata, and keeping PR descriptions current.
+name: pr-create-update
+description: Create, update, format, and maintain pull requests — sizing, stacking, metadata, and keeping PR descriptions current.
 compatibility: opencode
 metadata:
   audience: engineers
