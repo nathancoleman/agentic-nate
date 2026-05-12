@@ -43,3 +43,4 @@ Use this skill when you want to bring all open PRs up to date with their base br
 - List each PR processed with its number, title, and outcome (rebased, adjusted, skipped).
 - Note any PRs that were skipped and why.
 - Note any adjustments made due to upstream changes.
+- Flag any PRs that have pending review feedback or requested changes that need to be addressed.
