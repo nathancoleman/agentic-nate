@@ -10,23 +10,24 @@ metadata:
 
 ## What I do
 - Find all of my open PRs in the current repository.
-- Rebase each one onto the latest main branch.
+- Rebase each one onto the latest version of its base branch.
 - Resolve merge conflicts.
 - Identify recent changes merged into main that affect the PR and make appropriate adjustments (e.g., updated imports, renamed functions, changed APIs, new patterns).
 - Push the updated branches.
 
 ## When to use me
-Use this skill when you want to bring all open PRs up to date with the latest main branch, especially after significant changes have been merged.
+Use this skill when you want to bring all open PRs up to date with their base branches, especially after significant changes have been merged.
 
 ## Process
-1. Fetch latest main: `git fetch origin main`.
-2. List my open PRs: `gh pr list --author @me --state open --json number,headRefName,title`.
-3. For each PR, in order:
+1. Fetch latest refs: `git fetch origin`.
+2. List my open PRs: `gh pr list --author @me --state open --json number,headRefName,baseRefName,title`.
+3. Order PRs so that stacked PRs are processed base-first (if PR A's branch is the base of PR B, process A before B).
+4. For each PR, in order:
    a. Check out the PR branch: `gh pr checkout <number>`.
-   b. Rebase onto latest main: `git rebase origin/main`.
+   b. Rebase onto the latest base branch: `git rebase origin/<baseRefName>`.
    c. If conflicts arise, resolve them and continue the rebase.
-   d. After rebasing, review `git log origin/main..HEAD` to understand the PR's changes.
-   e. Review recent commits on main (`git log --oneline HEAD..origin/main` from before rebase, or `git log --oneline <old-main>..<new-main>`) to identify changes that may require adjustments in the PR (renamed symbols, changed interfaces, new patterns, updated dependencies).
+   d. After rebasing, review the PR's changes relative to its base.
+   e. Review recent commits on the base branch to identify changes that may require adjustments in the PR (renamed symbols, changed interfaces, new patterns, updated dependencies).
    f. Make any necessary adjustments to keep the PR consistent with the current state of main.
    g. Run available checks (tests, lint, build) to verify nothing is broken.
    h. Force push the updated branch: `git push --force-with-lease`.
