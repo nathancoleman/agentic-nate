@@ -21,6 +21,7 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - Rely on the existing `gh` authentication context; do not add separate authentication steps unless `gh` reports an auth error.
 - Always open newly created PRs in the browser immediately after creation (`gh pr view --web` or equivalent).
 - If a Jira ticket is tied to the work, put a Jira link at the very top of the PR body using this exact format: `[AGX-10](https://hashicorp.atlassian.net/browse/AGX-10)` (replace key consistently in both places).
+- When creating a new PR with a Jira ticket key in the title (e.g., `[AGX-10]`), transition the corresponding Jira ticket to "In Review" status using `acli jira workitem transition --key "AGX-10" --status "In Review"`.
 - Aim for PR size under 400 changed lines.
 - Slightly above 400 is acceptable when the change remains easy to review.
 - When multiple valid implementation paths exist, prefer the one that minimizes the net PR diff while still fully addressing the request.
