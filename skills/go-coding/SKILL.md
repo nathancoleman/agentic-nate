@@ -28,6 +28,7 @@ Use this skill when adding or changing Go code, implementing handlers/services/l
 - Always keep exported APIs intentionally small and behavior-focused.
 
 ## Formatting and structure
+- Always run `gofmt` on all modified Go files before committing to ensure proper formatting.
 - Always keep code `gofmt`-clean.
 - Always keep imports organized and minimal; use `goimports` when available.
 - Always prefer small functions with single-purpose flow over long multi-purpose functions.
