@@ -46,6 +46,7 @@ Use this skill when the task involves Atlassian CLI workflows such as:
 - Minimize output aggressively because Jira payloads, especially descriptions, can be extremely verbose.
 - Prefer narrow, explicit targeting with `--key`, IDs, or precise JQL rather than broad bulk operations.
 - Use command help early when exact flags are uncertain.
+- Always write descriptions in markdown format when creating or editing Jira work items.
 
 ## Authentication
 
@@ -100,9 +101,11 @@ acli jira workitem view PROJ-123 --fields "summary,comment" --json
 
 ### Create a work item
 
+When providing a description, write it in markdown format:
+
 ```bash
 acli jira workitem create --project PROJ --type Task --summary "Implement feature flag checks"
-acli jira workitem create --project PROJ --type Bug --summary "Fix auth regression" --description "Repro and expected behavior" --assignee "@me"
+acli jira workitem create --project PROJ --type Bug --summary "Fix auth regression" --description "**Repro:** Steps to reproduce\n\n**Expected:** What should happen" --assignee "@me"
 acli jira workitem create --project PROJ --type Task --summary "Follow-up task" --parent PROJ-100
 acli jira workitem create --from-json "workitem.json"
 acli jira workitem create --project PROJ --type Task --summary "Triage production incident" --label "incident,urgent"
