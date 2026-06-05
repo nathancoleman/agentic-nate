@@ -16,5 +16,5 @@ Use this skill when you need AWS credentials to run commands against the agentic
 
 ## Process
 1. Run `doormat login` to authenticate.
-2. Run `eval $(doormat aws --account agentic_experience_dev)` to export AWS credentials into the shell environment.
+2. Run `eval $(doormat aws export --account agentic_experience_dev)` to export AWS credentials into the shell environment.
 3. Verify credentials are working with `aws sts get-caller-identity`.
