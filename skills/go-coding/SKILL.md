@@ -35,6 +35,7 @@ Use this skill when adding or changing Go code, implementing handlers/services/l
 - Always keep names explicit enough to remove ambiguity without adding noise.
 
 ## Testing rules
+- Always prefer `testify/require` and `testify/assert` over `t.Fatal`, `t.Fatalf`, `t.Error`, and `t.Errorf` wherever it makes sense.
 - Always prefer `testify/require` and `testify/assert` when that style is already present in the repository.
 - Always use `require.*` for prerequisites and invariants that must hold for the rest of the test to be valid.
 - Always keep prerequisite `require.*` checks grouped with the setup/action they validate.
