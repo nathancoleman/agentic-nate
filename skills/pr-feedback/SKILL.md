@@ -28,6 +28,7 @@ Use this skill when addressing review comments, resolving conversations, or iter
 
 ## Feedback triage and conversation resolution
 - Gather open review threads and group them by file or theme.
+- Skip any thread where the PR author (the user) left the most recent comment. A trailing comment from the author means the ball is in the reviewer's court—do not reply again or take further action on that thread.
 - Before acting on any feedback, evaluate whether it falls within the PR's stated scope (title, body, and the intent of the existing diff).
 - If feedback requests changes that are clearly outside the PR's scope (e.g., unrelated refactors, feature requests, or fixes to pre-existing issues not introduced by this PR):
   - Do NOT implement the out-of-scope change.
