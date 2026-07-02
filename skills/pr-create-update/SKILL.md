@@ -44,7 +44,7 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - Keep this note accurate if PR numbers, ordering, or dependencies change.
 - If stacked PR titles use a Jira key prefix in brackets (for example, `[PROJ-123]`), every later PR in that stack must keep the same bracketed Jira prefix as the earlier PRs.
 - When creating a later PR in a stack, infer the Jira prefix from the prior PR title and reuse it exactly (including bracket format).
-- On updates, check whether the referenced prior PR has merged; if it has, remove the top-of-body stack warning from the current PR.
+- On updates, check whether the referenced prior PR has merged. Only remove the top-of-body stack note when that referenced PR has been merged. If it is still open (or in any non-merged state), keep the note in place.
 
 ## Adaptive PR formatting
 - First, infer repository conventions from existing PRs, commit history, or contribution docs.
