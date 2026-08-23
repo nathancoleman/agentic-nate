@@ -18,10 +18,12 @@ Use this skill when creating or updating a pull request, or restructuring large 
 
 ## Core operating rules
 - Use the GitHub CLI (`gh`) for PR operations (`gh pr create`, `gh pr edit`, `gh pr view`, `gh pr status`).
+- For stacked work, use the `gh stack` extension (`gh stack init`/`add`/`submit`/`sync`) instead of creating and wiring up each PR by hand — see "Stacked PR requirements" below.
 - Rely on the existing `gh` authentication context; do not add separate authentication steps unless `gh` reports an auth error.
 - Always open newly created PRs in the browser immediately after creation (`gh pr view --web` or equivalent).
-- If a Jira ticket is tied to the work, put a Jira link at the very top of the PR body using this exact format: `[AGX-10](https://hashicorp.atlassian.net/browse/AGX-10)` (replace key consistently in both places).
-- When creating a new PR with a Jira ticket key in the title (e.g., `[AGX-10]`), transition the corresponding Jira ticket to "In Review" status using `acli jira workitem transition --key "AGX-10" --status "In Review"`.
+- Never include any Claude/Anthropic attribution, "Generated with Claude Code" badge, or co-author trailer in commit messages or PR bodies. PR bodies and commits should read as written entirely by the human author.
+- If a Jira ticket is tied to the work, put a Jira link at the very top of the PR body using this exact format: `[PROJ-123](https://<your-site>.atlassian.net/browse/PROJ-123)` (replace the project key and site consistently in both places — infer both from the ticket key already in use for this repo/branch, not from memory of a prior job's project).
+- When creating a new PR with a Jira ticket key in the title (e.g., `[PROJ-123]`), transition the corresponding Jira ticket to "In Review" status using `acli jira workitem transition --key "PROJ-123" --status "In Review"`.
 - Aim for PR size under 400 changed lines.
 - Slightly above 400 is acceptable when the change remains easy to review.
 - When multiple valid implementation paths exist, prefer the one that minimizes the net PR diff while still fully addressing the request.
@@ -30,21 +32,12 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - In a stack, each PR must also be targeted and represent a clear step in the overall story.
 
 ## Stacked PR requirements
-- Build the stack in dependency order so each PR can be reviewed with minimal context switching.
-- Create every stacked PR after the first in draft mode initially (`gh pr create --draft`).
-- Every PR after the first must add this note at the very top of the PR body:
-
-```md
-> [!NOTE]
-> This PR is part of a stack. Please review #<previous-pr-number> first.
-```
-
-- Replace `<previous-pr-number>` with the immediately preceding PR in the stack.
-- When a Jira ticket is tied to the work, the Jira link stays first and the stack note goes immediately below it.
-- Keep this note accurate if PR numbers, ordering, or dependencies change.
+- Build the stack with `gh stack init <branch1> <branch2> ...` (adopts existing branches or creates missing ones, each based on the previous) rather than manually chaining branches and base refs. Use `gh stack add <branch>` to add one more branch on top as work continues.
+- Push and open the PRs with `gh stack submit` — it pushes every branch and creates/updates all the PRs and the stack object on GitHub in one step. In an interactive terminal this opens an editor to set each new PR's title, description, and draft state; default new PRs to draft there. Non-interactively (or with `--auto`), new PRs are created as drafts unless `--open` is passed.
+- Once `gh stack submit` has linked the PRs, GitHub renders the stack relationship natively on each PR — no manual "this PR is part of a stack, review #N first" note is needed in the body.
 - If stacked PR titles use a Jira key prefix in brackets (for example, `[PROJ-123]`), every later PR in that stack must keep the same bracketed Jira prefix as the earlier PRs.
 - When creating a later PR in a stack, infer the Jira prefix from the prior PR title and reuse it exactly (including bracket format).
-- On updates, check whether the referenced prior PR has merged. Only remove the top-of-body stack note when that referenced PR has been merged. If it is still open (or in any non-merged state), keep the note in place.
+- When a Jira ticket is tied to the work, keep the Jira link at the very top of every PR body in the stack, same as any other PR.
 
 ## Adaptive PR formatting
 - First, infer repository conventions from existing PRs, commit history, or contribution docs.
@@ -61,7 +54,7 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - Update the title and body whenever appropriate to prevent stale reviewer context.
 - When editing the PR body, preserve any existing screenshots or images (markdown image syntax or HTML `<img>` tags) in place. Do not remove, reorder, or rewrite image references.
 - Re-validate the Jira link at the top of the PR body (when applicable) and keep the key/URL aligned.
-- For stacked PRs, re-validate dependency references and top-of-body stack notes after each update.
+- For stacked PRs, run `gh stack sync` to bring branches and PR state up to date rather than manually re-pointing base branches; re-run `gh stack submit` if PR titles/bodies need updating across the stack.
 - For stacked PRs with bracketed Jira prefixes in titles, re-validate prefix consistency across the full stack after each update.
 
 ## Validation and readiness checks
@@ -72,4 +65,4 @@ Use this skill when creating or updating a pull request, or restructuring large 
 
 ## Final output
 - Provide the PR URL.
-- Provide a short readiness summary with: scope, validations run, notable risks, and stack position (if applicable).
+- Provide a short readiness summary with: scope, validations run, notable risks, and stack position (from `gh stack view`, if applicable).
