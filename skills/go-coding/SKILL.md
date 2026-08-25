@@ -34,6 +34,13 @@ Use this skill when adding or changing Go code, implementing handlers/services/l
 - Always prefer small functions with single-purpose flow over long multi-purpose functions.
 - Always keep names explicit enough to remove ambiguity without adding noise.
 
+## Dependency management
+- Always add a new dependency with `go get <module>@latest` (or check the latest tagged version with `go list -m -versions <module>` / on pkg.go.dev first) rather than hand-writing an arbitrary or remembered version into `go.mod`.
+- Always prefer the latest stable release for a newly introduced dependency. Only pin below latest when there's a concrete, stated reason (e.g. a higher major version requires a Go version this module doesn't support yet, or a breaking API change the codebase isn't ready to absorb) — say so explicitly rather than silently under-pinning.
+- Always skip pre-release/RC/beta versions for a new dependency unless the user specifically asks for one.
+- Always run `go mod tidy` after adding or updating a dependency, and verify the build/tests still pass.
+- This applies to newly introduced dependencies, not to every existing one in `go.mod` — don't bump unrelated existing dependencies as a side effect of an unrelated change unless asked.
+
 ## Testing rules
 - Always prefer `testify/require` and `testify/assert` over `t.Fatal`, `t.Fatalf`, `t.Error`, and `t.Errorf` wherever it makes sense.
 - Always prefer `testify/require` and `testify/assert` when that style is already present in the repository.
