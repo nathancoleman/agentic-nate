@@ -1,6 +1,6 @@
 ---
 name: pr-personal-review
-description: Post author-perspective comments on a PR to guide reviewers toward critical change areas and clarify non-obvious logic.
+description: Draft author-perspective comments on a PR as a pending review (not submitted) to guide reviewers toward critical change areas and clarify non-obvious logic.
 compatibility: opencode
 metadata:
   audience: engineers
@@ -11,19 +11,21 @@ metadata:
 ## What I do
 - Analyze a PR's diff in the context of its stated purpose.
 - Identify the most critical change areas that are central to the PR's theme.
-- Post targeted comments on the PR highlighting these areas and explaining *why* they matter.
+- Draft targeted comments on the PR highlighting these areas and explaining *why* they matter, as a pending (draft) review.
 - Clarify code that could be confusing, subtle, or easily misunderstood by someone reading the diff cold.
+- Leave the review in a pending/draft state for the user to check and submit themselves — never submit it automatically.
 
 ## When to use me
 Use this skill after a PR is ready for review but before requesting reviewers. The goal is to reduce reviewer ramp-up time and focus attention on what matters most.
 
 ## Core operating rules
-- Use `gh` CLI for all GitHub operations (fetching PR info, posting comments).
+- Use `gh` CLI for all GitHub operations (fetching PR info, drafting comments).
 - Read the PR title, body, and full diff to understand the theme and scope.
 - Do NOT post comments on trivial or self-explanatory changes (imports, formatting, renames with obvious intent).
 - Every comment must add reviewer value—either by highlighting criticality or clarifying complexity.
 - Keep comments concise. Lead with the insight; skip preamble.
-- Use a single PR review submission (not individual comments) attached to specific lines/files via the GitHub API.
+- Create a single PR review as a pending draft (not individual standalone comments, and not submitted) attached to specific lines/files via the GitHub API.
+- Never submit the review — no `event` value, no follow-up submit call. The review must remain in `PENDING` state, visible only to its author, until the user submits it themselves.
 
 ## Comment categories
 Post comments that fall into one or more of these categories:
@@ -70,16 +72,18 @@ Decisions that require background knowledge the reviewer may not have, including
 4. Look at recent merged PRs and the surrounding codebase to understand patterns and context that reviewers may not have fresh in mind.
 5. Walk the diff and select locations that are critical, subtle, or likely to confuse. Look for code that mirrors existing patterns elsewhere in the repo.
 6. Draft comments—one per location. Each comment should be 1-2 informal sentences max. Keep the tone conversational and direct. Reference analogous code paths or recent changes when it helps build the reviewer's mental model.
-7. Post all comments as a single PR review using the GitHub API. The review must:
-   - Use event `COMMENT` (not `APPROVE` or `REQUEST_CHANGES`).
+7. Create all comments as a single pending PR review using the GitHub API. The review must:
+   - Omit `event` entirely — do not pass `COMMENT`, `APPROVE`, or `REQUEST_CHANGES`. Omitting it leaves the review in `PENDING` state instead of submitting it.
    - Set the review body to `"Personal review"`.
-   - Include all comments in the `comments` array of the review submission (not posted individually).
+   - Include all comments in the `comments` array of the same request (not posted individually).
    - Comments can be file-level (`path` only) or line-level (`path` + `line`) depending on what best serves the reviewer.
-   - Use `gh api repos/{owner}/{repo}/pulls/{number}/reviews` with a single POST containing `body`, `event`, and `comments`.
-8. Report back with a summary of how many comments were posted and which files they target.
+   - Use `gh api repos/{owner}/{repo}/pulls/{number}/reviews` with a single POST containing `body` and `comments` — no `event` field.
+   - Do not call any endpoint that submits or finalizes the review (e.g. `POST .../reviews/{review_id}/events`) — creating it is the whole job.
+8. Report back with a summary of how many comments were drafted, which files they target, and a reminder that the review is pending and needs to be checked and submitted by the user (in the PR's "Files changed" tab, via the "Finish your review" button).
 
 ## Constraints
 - Do not suggest code changes. This is not a code review—it is author context for reviewers.
 - Do not duplicate information already present in the PR body. It is fine to supplement or point to specific details the body covers at a high level.
 - Do not comment on files or hunks that are outside the PR's stated scope.
 - Aim for 3-8 comments on a typical PR. Fewer is fine if the PR is straightforward; more is acceptable for complex PRs, but never be noisy.
+- Never submit the pending review. The user reviews the drafted comments and submits (or edits/discards) the review themselves.
