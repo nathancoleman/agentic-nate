@@ -21,6 +21,7 @@ Use this skill when creating or updating a pull request, or restructuring large 
 - For stacked work, use the `gh stack` extension (`gh stack init`/`add`/`submit`/`sync`) instead of creating and wiring up each PR by hand — see "Stacked PR requirements" below.
 - Rely on the existing `gh` authentication context; do not add separate authentication steps unless `gh` reports an auth error.
 - Always open newly created PRs in the browser immediately after creation (`gh pr view --web` or equivalent).
+- After creating a PR, turn on Auto-fix for it: call `ccd_pr get_status` to confirm the PR is bound, then `ccd_pr set_monitor` with `auto_fix: true` and the PR's `url`. This applies per PR (including each new PR in a stack).
 - Never include any Claude/Anthropic attribution, "Generated with Claude Code" badge, or co-author trailer in commit messages or PR bodies. PR bodies and commits should read as written entirely by the human author.
 - If a Jira ticket is tied to the work, put a Jira link at the very top of the PR body using this exact format: `[PROJ-123](https://<your-site>.atlassian.net/browse/PROJ-123)` (replace the project key and site consistently in both places — infer both from the ticket key already in use for this repo/branch, not from memory of a prior job's project).
 - When creating a new PR with a Jira ticket key in the title (e.g., `[PROJ-123]`), transition the corresponding Jira ticket to "In Review" status using `acli jira workitem transition --key "PROJ-123" --status "In Review"`.
@@ -65,4 +66,5 @@ Use this skill when creating or updating a pull request, or restructuring large 
 
 ## Final output
 - Provide the PR URL.
+- Confirm Auto-fix was turned on for the PR.
 - Provide a short readiness summary with: scope, validations run, notable risks, and stack position (from `gh stack view`, if applicable).
