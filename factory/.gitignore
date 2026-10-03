@@ -1,0 +1,3 @@
+# Copied from ../skills by `make skills`; skills/ at the repo root is the source.
+/skills/*
+!/skills/org-conventions/
