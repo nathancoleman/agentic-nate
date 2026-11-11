@@ -32,6 +32,11 @@ local-claude: ## Switch existing agents to claude_local with the CLI engine (COM
 	@test -n "$(COMPANY_ID)" || { echo "COMPANY_ID is required"; exit 1; }
 	@DRY_RUN=$(DRY_RUN) ./scripts/local-claude.sh $(COMPANY_ID) $(AGENTS)
 
+.PHONY: agent-skills
+agent-skills: ## Give existing agents the repo's skills from agent-skills.json (COMPANY_ID=..., DRY_RUN=1 to preview)
+	@test -n "$(COMPANY_ID)" || { echo "COMPANY_ID is required"; exit 1; }
+	@DRY_RUN=$(DRY_RUN) ./scripts/agent-skills.sh $(COMPANY_ID)
+
 .PHONY: onboard
 onboard: ## Set up a local Paperclip instance
 	$(PAPERCLIP) onboard --yes
