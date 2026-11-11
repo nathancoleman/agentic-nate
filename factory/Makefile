@@ -19,6 +19,19 @@ skills: ## Copy the repo's ../skills into skills/ (gitignored)
 run: deps skills ## Install deps, start Paperclip, and import the factory if it is not already imported
 	@./scripts/run.sh
 
+.PHONY: service
+service: ## Start Paperclip at login (macOS) with Homebrew on its PATH; re-run after paperclipai service install/restart
+	@./scripts/service.sh
+
+.PHONY: restart
+restart: ## Restart the login service without dropping its PATH (use instead of paperclipai service restart)
+	@./scripts/service.sh restart
+
+.PHONY: local-claude
+local-claude: ## Switch existing agents to claude_local with the CLI engine (COMPANY_ID=..., AGENTS="A B" for some, DRY_RUN=1 to preview)
+	@test -n "$(COMPANY_ID)" || { echo "COMPANY_ID is required"; exit 1; }
+	@DRY_RUN=$(DRY_RUN) ./scripts/local-claude.sh $(COMPANY_ID) $(AGENTS)
+
 .PHONY: onboard
 onboard: ## Set up a local Paperclip instance
 	$(PAPERCLIP) onboard --yes
