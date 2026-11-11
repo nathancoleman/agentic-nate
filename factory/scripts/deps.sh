@@ -143,7 +143,16 @@ check_auth() {
   fi
 
   if ! gh auth status >/dev/null 2>&1; then
-    warn "gh is not authenticated; run: gh auth login"
+    warn "gh is not authenticated; run: gh auth login --insecure-storage"
+    return
+  fi
+
+  # Paperclip agents run gh from a background service, which can't read the
+  # macOS Keychain, so gh must keep its token in ~/.config/gh/hosts.yml
+  # (readable only by you) instead.
+  if gh auth status 2>&1 | grep -q '(keyring)'; then
+    log "gh: moving the token from the Keychain to ~/.config/gh/hosts.yml so Paperclip agents can use it"
+    gh auth token | gh auth login --hostname github.com --git-protocol https --with-token --insecure-storage
   fi
 }
 

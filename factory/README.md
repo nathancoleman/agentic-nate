@@ -16,8 +16,8 @@ Go and Terraform are the defaults for backend services. Every agent adapts to th
 factory/
 ├── COMPANY.md                 # company, goals, flow, and gates
 ├── .paperclip.yaml            # adapters, models, roles, env inputs
-├── Makefile                   # deps, run, sync, export
-├── scripts/                   # deps.sh, run.sh, sync-skills.sh (not part of the import)
+├── Makefile                   # deps, run, service, local-claude, sync, export
+├── scripts/                   # deps, run, service, local-claude, sync-skills (not part of the import)
 ├── agents/<slug>/AGENTS.md    # per-agent instructions and skill list
 └── skills/
     ├── org-conventions/       # package-local skill
@@ -48,7 +48,39 @@ make deps
 DRY_RUN=1 make deps
 ```
 
-Authenticate `gh` (`gh auth login`) and Claude Code once per machine; `make deps` warns if `gh` isn't logged in.
+Authenticate `gh` (`gh auth login --insecure-storage`) and Claude Code once per machine; `make deps` warns if `gh` isn't logged in.
+
+## Start Paperclip at login
+
+On macOS, run Paperclip as a background service instead of keeping `make run` open:
+
+```bash
+make service
+```
+
+This registers Paperclip's login service and points it at a small launcher, `~/.paperclip/bin/paperclip-service`, that puts Homebrew on its PATH. Without it, the service gets launchd's bare PATH, so Paperclip can't find `claude` and agents can't find `gh`. `make run` sees the running service and only imports the company.
+
+`paperclipai service install` and `paperclipai service restart` rewrite the service and drop the launcher. Restart with `make restart` instead, and run `make service` again after a Paperclip update reinstalls the service.
+
+## Agents use this machine's gh and claude
+
+Agents run on the `claude_local` adapter with `engine: cli`, so they run the `claude` on PATH as you and use your `gh` login rather than a Paperclip GitHub connection.
+
+- **gh token storage:** the service can't read the macOS Keychain, so `make deps` moves your `gh` token into `~/.config/gh/hosts.yml` (readable only by you).
+- **CLI engine:** the default ACP engine runs a copy of Claude Code bundled with Paperclip, which can be too old for the newest models. The CLI engine uses your Homebrew `claude`.
+- **No GitHub connection:** an installed Paperclip GitHub connection takes over from your `gh` login. If an agent asks to connect GitHub, decline it.
+
+The Paperclip UI has no option for `claude_local`: its "Claude Code" harness is Paperclip's sandboxed runner, where agents get a private home folder and can't use your `gh` login. Saving an agent's harness in the UI switches it to the runner. To switch agents back, or to switch agents you created in the UI:
+
+```bash
+make local-claude COMPANY_ID=<company-id> DRY_RUN=1
+```
+
+```bash
+make local-claude COMPANY_ID=<company-id>
+```
+
+Add `AGENTS="Maintainer Scout"` to switch only some agents.
 
 ## Sync changes into an existing company
 
