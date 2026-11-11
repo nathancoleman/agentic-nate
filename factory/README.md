@@ -16,8 +16,9 @@ Go and Terraform are the defaults for backend services. Every agent adapts to th
 factory/
 ├── COMPANY.md                 # company, goals, flow, and gates
 ├── .paperclip.yaml            # adapters, models, roles, env inputs
-├── Makefile                   # deps, run, service, local-claude, sync, export
-├── scripts/                   # deps, run, service, local-claude, sync-skills (not part of the import)
+├── Makefile                   # deps, run, service, local-claude, agent-skills, sync, export
+├── agent-skills.json          # repo skills for agents made outside this package, by agent name
+├── scripts/                   # deps, run, service, local-claude, agent-skills, sync-skills (not part of the import)
 ├── agents/<slug>/AGENTS.md    # per-agent instructions and skill list
 └── skills/
     ├── org-conventions/       # package-local skill
@@ -81,6 +82,20 @@ make local-claude COMPANY_ID=<company-id>
 ```
 
 Add `AGENTS="Maintainer Scout"` to switch only some agents.
+
+## Give other agents the repo's skills
+
+Agents imported from this package get their skills from `agents/<slug>/AGENTS.md`. For agents created in the Paperclip UI, `agent-skills.json` lists the repo skills each one should have, by agent name:
+
+```bash
+make agent-skills COMPANY_ID=<company-id> DRY_RUN=1
+```
+
+```bash
+make agent-skills COMPANY_ID=<company-id>
+```
+
+This imports the repo's skills into the company from GitHub, so Paperclip can offer updates when `main` changes, then adds each agent's skills. It only adds skills, so Paperclip's built-in skills and anything assigned in the UI stay, and it skips names the company doesn't have. Paperclip's import rejects `aws-creds` because the skill runs remotely fetched code, so it can't be assigned.
 
 ## Sync changes into an existing company
 

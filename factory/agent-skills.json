@@ -1,0 +1,25 @@
+{
+  "Architect": ["org-conventions", "diagramming", "pr-create-update", "todo-execution"],
+  "Developer": [
+    "org-conventions",
+    "go-coding",
+    "error-debugging",
+    "todo-execution",
+    "pr-create-update",
+    "pr-feedback",
+    "pr-update-branch",
+    "pr-rebase",
+    "pr-personal-review",
+    "github-actions-workflows"
+  ],
+  "Maintainer": [
+    "org-conventions",
+    "error-debugging",
+    "pr-create-update",
+    "pr-feedback",
+    "pr-update-branch",
+    "pr-rebase",
+    "github-actions-workflows"
+  ],
+  "Scout": ["org-conventions", "error-debugging", "diagramming"]
+}
